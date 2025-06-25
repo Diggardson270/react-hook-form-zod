@@ -2,7 +2,15 @@
 
 
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+
 function page() {
+  const schema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8),
+  });
 
 
   const {
@@ -14,6 +22,7 @@ function page() {
     defaultValues: {
       email: "test@gmail.com",
     },
+    resolver: zodResolver(schema),
   });
 
 
@@ -36,17 +45,7 @@ function page() {
       >
         <input
           className="bg-[#292929] p-6 rounded-xl"
-          {...register("email", {
-            required: "Email is required",
-            pattern: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/,
-            // for a custom validation where you write your own logic in a function
-            validate: (value) => {
-              if (!value.includes("@")) {
-                return "Email must have an @";
-              }
-              return true;
-            },
-          })}
+          {...register("email")}
           type="text"
           placeholder="Email"
         />
@@ -55,13 +54,7 @@ function page() {
         )}
         <input
           className="bg-[#292929] p-6 rounded-xl"
-          {...register("password", {
-            required: "Pasword is required",
-            minLength: {
-              value: 8,
-              message: "Password must have atleast 8 characters",
-            },
-          })}
+          {...register("password")}
           type="password"
           placeholder="Password"
         />
